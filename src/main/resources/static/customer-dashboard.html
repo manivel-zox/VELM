@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Account — VELMART</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/toast-modal.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div id="app-header"></div>
+
+  <main class="container">
+    <div class="dashboard-layout">
+      <!-- Sidebar Navigation -->
+      <aside class="dashboard-sidebar">
+        <div class="user-profile-summary">
+          <div id="profile-avatar" class="user-avatar-placeholder">U</div>
+          <h3 id="profile-display-name" style="font-size: 16px; font-weight: 700; color: var(--primary-navy);">Customer</h3>
+          <p id="profile-display-email" style="font-size: 12px; color: var(--text-muted); word-break: break-all;">-</p>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li>
+            <a href="javascript:void(0)" class="sidebar-link active" data-tab="orders" onclick="CustomerDashboard.switchTab('orders')">
+              📦 My Orders & Tracking
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)" class="sidebar-link" data-tab="addresses" onclick="CustomerDashboard.switchTab('addresses')">
+              📍 Saved Addresses
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)" class="sidebar-link" data-tab="profile" onclick="CustomerDashboard.switchTab('profile')">
+              👤 Account Profile & Security
+            </a>
+          </li>
+          <li style="margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 12px;">
+            <a href="javascript:void(0)" class="sidebar-link" style="color: var(--danger);" onclick="Auth.logout()">
+              🚪 Sign Out
+            </a>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Content Area -->
+      <section class="dashboard-content">
+        <!-- Tab 1: Orders -->
+        <div id="tab-orders" class="tab-pane">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Order History & Tracking</h2>
+              <p class="section-subtitle">Real-time status updates and order records</p>
+            </div>
+          </div>
+          <div id="orders-list-container">
+            <div class="loading-container"><div class="spinner spinner-dark"></div><p>Loading orders...</p></div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Addresses -->
+        <div id="tab-addresses" class="tab-pane" style="display: none;">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Delivery Address Book</h2>
+              <p class="section-subtitle">Manage multiple shipping addresses for fast checkout</p>
+            </div>
+          </div>
+          <div id="dashboard-address-container">
+            <div class="loading-container"><div class="spinner spinner-dark"></div></div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Profile -->
+        <div id="tab-profile" class="tab-pane" style="display: none;">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Profile & Security Settings</h2>
+              <p class="section-subtitle">Update contact details or change your password</p>
+            </div>
+          </div>
+
+          <form onsubmit="CustomerDashboard.updateProfile(event)" style="max-width: 500px;">
+            <div class="form-group">
+              <label class="form-label">Full Name *</label>
+              <input type="text" id="profile-name-input" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number *</label>
+              <input type="tel" id="profile-phone-input" class="form-control" required />
+            </div>
+
+            <h4 style="margin: 24px 0 12px; font-size: 15px; font-weight: 700; color: var(--primary-navy);">Change Password</h4>
+            <div class="form-group">
+              <label class="form-label">Current Password</label>
+              <input type="password" id="profile-curr-pass" class="form-control" placeholder="••••••••" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">New Password</label>
+              <input type="password" id="profile-new-pass" class="form-control" placeholder="••••••••" minlength="6" />
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Save Profile Changes</button>
+          </form>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Add Address Modal -->
+  <div id="address-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Delivery Address</h3>
+        <button class="modal-close" onclick="CustomerDashboard.closeAddAddressModal()">&times;</button>
+      </div>
+      <form onsubmit="CustomerDashboard.submitNewAddress(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Recipient Full Name *</label>
+            <input type="text" id="addr-name" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number *</label>
+            <input type="tel" id="addr-phone" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Address Line 1 *</label>
+            <input type="text" id="addr-line1" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Address Line 2 (Optional)</label>
+            <input type="text" id="addr-line2" class="form-control" />
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label">City *</label>
+              <input type="text" id="addr-city" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">State *</label>
+              <input type="text" id="addr-state" class="form-control" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Postal / PIN Code *</label>
+            <input type="text" id="addr-pin" class="form-control" required />
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;">
+              <input type="checkbox" id="addr-default" />
+              <span>Set as default address</span>
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="CustomerDashboard.closeAddAddressModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Address</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="app-footer"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/customer-dashboard.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      CustomerDashboard.init();
+    });
+  </script>
+</body>
+</html>

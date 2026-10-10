@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout & Delivery Address — VELMART</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/toast-modal.css">
+</head>
+<body>
+  <div id="app-header"></div>
+
+  <main class="container" style="padding-top: 30px; padding-bottom: 60px;">
+    <div class="section-header">
+      <div>
+        <h1 class="section-title">Secure Checkout</h1>
+        <p class="section-subtitle">Select delivery address and confirm your Cash on Delivery order</p>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 30px;">
+      <!-- Left Column: Delivery Address & Payment Method -->
+      <div>
+        <!-- Step 1: Address -->
+        <div class="card" style="margin-bottom: 24px;">
+          <h3 style="font-size: 17px; font-weight: 700; color: var(--primary-navy); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+            <span style="background: var(--accent-blue); color: #fff; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 13px;">1</span>
+            Select Delivery Address
+          </h3>
+          <div id="address-list-container">
+            <div class="loading-container"><div class="spinner spinner-dark"></div></div>
+          </div>
+        </div>
+
+        <!-- Step 2: Contact Info -->
+        <div class="card" style="margin-bottom: 24px;">
+          <h3 style="font-size: 17px; font-weight: 700; color: var(--primary-navy); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+            <span style="background: var(--accent-blue); color: #fff; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 13px;">2</span>
+            Contact Phone for Delivery Updates
+          </h3>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Phone Number (10 digits) *</label>
+            <input type="tel" id="checkout-contact-phone" class="form-control" placeholder="+91 9876543210" required />
+            <small style="color: var(--text-muted); font-size: 12px; margin-top: 4px; display: block;">Our delivery executive will call this number prior to arrival.</small>
+          </div>
+        </div>
+
+        <!-- Step 3: Payment Method -->
+        <div class="card">
+          <h3 style="font-size: 17px; font-weight: 700; color: var(--primary-navy); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+            <span style="background: var(--accent-blue); color: #fff; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 13px;">3</span>
+            Payment Method
+          </h3>
+
+          <div class="card" style="background: var(--accent-blue-light); border-color: var(--accent-blue); padding: 16px; display: flex; align-items: flex-start; gap: 12px;">
+            <input type="radio" name="payment_method" value="CASH_ON_DELIVERY" checked style="margin-top: 4px;" />
+            <div>
+              <strong style="color: var(--primary-navy); font-size: 15px;">Cash on Delivery (COD)</strong>
+              <p style="color: var(--text-secondary); font-size: 13px; margin-top: 4px; line-height: 1.4;">
+                Pay in cash or UPI QR scan directly to the courier agent upon package receipt. No advance online payment required.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Order Items Review & Final CTA -->
+      <div>
+        <div class="card" style="position: sticky; top: 90px;">
+          <h3 style="font-size: 17px; font-weight: 700; color: var(--primary-navy); margin-bottom: 16px;">Items in Your Order</h3>
+          
+          <div id="checkout-items-summary" style="max-height: 240px; overflow-y: auto; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+            <!-- Rendered by checkout.js -->
+          </div>
+
+          <div id="checkout-totals" style="margin-bottom: 20px;">
+            <!-- Rendered by checkout.js -->
+          </div>
+
+          <button id="place-order-btn" class="btn btn-primary btn-lg btn-block" onclick="Checkout.placeOrder()">
+            Confirm Cash on Delivery Order
+          </button>
+
+          <div style="margin-top: 14px; text-align: center; font-size: 12px; color: var(--text-muted);">
+            By placing your order, you agree to VELMART's Terms of Service and Privacy Policy.
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add Address Modal -->
+  <div id="address-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Delivery Address</h3>
+        <button class="modal-close" onclick="Checkout.closeAddAddressModal()">&times;</button>
+      </div>
+      <form onsubmit="Checkout.submitNewAddress(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Recipient Full Name *</label>
+            <input type="text" id="addr-name" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number *</label>
+            <input type="tel" id="addr-phone" class="form-control" placeholder="10-digit mobile" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Flat / House No. / Building / Street *</label>
+            <input type="text" id="addr-line1" class="form-control" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Landmark / Area (Optional)</label>
+            <input type="text" id="addr-line2" class="form-control" />
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label">City *</label>
+              <input type="text" id="addr-city" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">State *</label>
+              <input type="text" id="addr-state" class="form-control" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">PIN / Postal Code *</label>
+            <input type="text" id="addr-pin" class="form-control" required />
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer;">
+              <input type="checkbox" id="addr-default" />
+              <span>Make this my default delivery address</span>
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="Checkout.closeAddAddressModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Address</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="app-footer"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/checkout.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      Checkout.init();
+    });
+  </script>
+</body>
+</html>

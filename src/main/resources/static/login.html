@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — VELMART Online Shopping</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/toast-modal.css">
+</head>
+<body>
+  <div id="app-header"></div>
+
+  <main class="container" style="padding: 60px 20px; display: flex; justify-content: center;">
+    <div class="card" style="max-width: 440px; width: 100%; padding: 34px;">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <h1 style="font-size: 24px; font-weight: 800; color: var(--primary-navy); margin-bottom: 6px;">Welcome to VELMART</h1>
+        <p style="color: var(--text-secondary); font-size: 14px;">Sign in to access your cart, addresses, and orders</p>
+      </div>
+
+      <form onsubmit="event.preventDefault(); const p = new URLSearchParams(window.location.search).get('redirect'); Auth.login(document.getElementById('login-email').value, document.getElementById('login-password').value, p);">
+        <div class="form-group">
+          <label class="form-label" for="login-email">Email Address</label>
+          <input type="email" id="login-email" class="form-control" placeholder="name@example.com" required />
+        </div>
+
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label class="form-label" for="login-password" style="margin-bottom: 0;">Password</label>
+            <a href="/forgot-password.html" style="font-size: 12px; color: var(--accent-blue);">Forgot password?</a>
+          </div>
+          <input type="password" id="login-password" class="form-control" placeholder="••••••••" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 10px;">
+          Sign In
+        </button>
+
+        <div style="background: var(--accent-blue-light); border-radius: var(--radius-sm); padding: 12px; margin-top: 20px; font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+          <strong>Demo Credentials:</strong><br>
+          Customer: <code>customer@velmart.com</code> / <code>Customer@Velmart2026!</code><br>
+          Seller: <code>seller@velmart.com</code> / <code>Seller@Velmart2026!</code><br>
+          Admin: <code>admin@velmart.com</code> / <code>Admin@Velmart2026!</code>
+        </div>
+
+        <div style="text-align: center; margin-top: 24px; font-size: 14px; color: var(--text-secondary);">
+          New to VELMART? <a href="/register.html" style="font-weight: 600;">Create an account</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

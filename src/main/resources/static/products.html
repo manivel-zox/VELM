@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Catalog — VELMART Online Shopping</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/toast-modal.css">
+  <style>
+    .catalog-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 30px;
+      margin-top: 30px;
+      margin-bottom: 60px;
+    }
+    .filter-sidebar {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      height: fit-content;
+    }
+    .filter-section {
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 20px;
+    }
+    .filter-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .filter-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary-navy);
+      margin-bottom: 12px;
+    }
+    .filter-radio-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+    .filter-radio-item:hover {
+      color: var(--text-primary);
+    }
+    @media (max-width: 860px) {
+      .catalog-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app-header"></div>
+
+  <main class="container">
+    <div class="catalog-layout">
+      <!-- Filter Sidebar -->
+      <aside class="filter-sidebar">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+          <h3 style="font-size: 17px; font-weight: 800; color: var(--primary-navy);">Filters</h3>
+          <a href="/products.html" style="font-size: 12px; color: var(--accent-blue); font-weight: 600;">Reset All</a>
+        </div>
+
+        <!-- Categories Filter -->
+        <div class="filter-section">
+          <div class="filter-title">Categories</div>
+          <div id="category-filter-list">
+            <!-- Loaded via Catalog.renderCategoryFilter -->
+          </div>
+        </div>
+
+        <!-- Price Range Filter -->
+        <div class="filter-section">
+          <div class="filter-title">Price Range (₹)</div>
+          <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+            <input type="number" id="min-price-input" placeholder="Min" class="form-control" style="padding: 6px 10px; font-size: 13px;" />
+            <input type="number" id="max-price-input" placeholder="Max" class="form-control" style="padding: 6px 10px; font-size: 13px;" />
+          </div>
+          <button class="btn btn-secondary btn-sm btn-block" onclick="Catalog.applyPriceFilter(document.getElementById('min-price-input').value, document.getElementById('max-price-input').value)">
+            Apply Price Filter
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Product Listing Content -->
+      <section>
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 16px 20px; border: 1px solid var(--border-color); border-radius: var(--radius-md); margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
+          <div>
+            <h1 id="catalog-title" style="font-size: 20px; font-weight: 800; color: var(--primary-navy);">All Products</h1>
+            <span id="result-count" style="font-size: 13px; color: var(--text-muted);">Loading...</span>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <label for="sort-select" style="font-size: 13px; font-weight: 600; color: var(--text-secondary);">Sort By:</label>
+            <select id="sort-select" class="form-select" style="width: 170px; padding: 6px 12px; font-size: 13px;" onchange="Catalog.setSort(this.value)">
+              <option value="newest">Newest Arrivals</option>
+              <option value="price_asc">Price: Low to High</option>
+              <option value="price_desc">Price: High to Low</option>
+              <option value="name_asc">Name: A to Z</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="products-container" class="products-grid">
+          <!-- Loaded via Catalog.fetchAndRenderProducts -->
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/catalog.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      Catalog.init();
+    });
+  </script>
+</body>
+</html>

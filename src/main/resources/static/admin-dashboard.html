@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrator Control Hub — VELMART</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/toast-modal.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div id="app-header"></div>
+
+  <main class="container">
+    <div class="dashboard-layout">
+      <!-- Admin Sidebar Navigation -->
+      <aside class="dashboard-sidebar">
+        <div class="user-profile-summary">
+          <div class="user-avatar-placeholder" style="background: linear-gradient(135deg, #ef4444, #991b1b);">A</div>
+          <h3 style="font-size: 16px; font-weight: 700; color: var(--primary-navy);">Platform Admin</h3>
+          <span class="badge badge-danger" style="margin-top: 6px;">ADMIN</span>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li>
+            <a href="javascript:void(0)" class="sidebar-link active" data-tab="overview" onclick="AdminDashboard.switchTab('overview')">
+              📊 Platform Overview
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)" class="sidebar-link" data-tab="users" onclick="AdminDashboard.switchTab('users')">
+              👥 User Management
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)" class="sidebar-link" data-tab="sellers" onclick="AdminDashboard.switchTab('sellers')">
+              🏪 Seller Approvals
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)" class="sidebar-link" data-tab="categories" onclick="AdminDashboard.switchTab('categories')">
+              🗂️ Categories
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)" class="sidebar-link" data-tab="products" onclick="AdminDashboard.switchTab('products')">
+              📦 Product Oversight
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)" class="sidebar-link" data-tab="orders" onclick="AdminDashboard.switchTab('orders')">
+              📑 Order Management
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)" class="sidebar-link" data-tab="audits" onclick="AdminDashboard.switchTab('audits')">
+              🛡️ Audit Trail Logs
+            </a>
+          </li>
+          <li style="margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 12px;">
+            <a href="javascript:void(0)" class="sidebar-link" style="color: var(--danger);" onclick="Auth.logout()">
+              🚪 Sign Out
+            </a>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Admin Main Content Area -->
+      <section class="dashboard-content">
+        <!-- Tab 1: Overview -->
+        <div id="tab-overview" class="tab-pane">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Platform Statistics</h2>
+              <p class="section-subtitle">Real-time VELMART aggregate performance</p>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-label">Registered Customers</span>
+              <span id="stat-admin-customers" class="stat-value">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Registered Sellers</span>
+              <span id="stat-admin-sellers" class="stat-value">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Pending Seller Approvals</span>
+              <span id="stat-admin-pending-sellers" class="stat-value" style="color: var(--warning);">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Active Products</span>
+              <span id="stat-admin-products" class="stat-value">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Total Orders</span>
+              <span id="stat-admin-orders" class="stat-value">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Total Platform Revenue</span>
+              <span id="stat-admin-revenue" class="stat-value" style="color: var(--accent-blue);">₹0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Users -->
+        <div id="tab-users" class="tab-pane" style="display: none;">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">User Account Governance</h2>
+              <p class="section-subtitle">Inspect registered customers and sellers</p>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-users-table-body">
+                  <tr><td colspan="6" style="text-align: center;">Loading users...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Sellers -->
+        <div id="tab-sellers" class="tab-pane" style="display: none;">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Seller Partner Approvals</h2>
+              <p class="section-subtitle">Review business profiles and authorize selling privileges</p>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Business Name & Address</th>
+                    <th>Phone</th>
+                    <th>Application Status</th>
+                    <th>Notes</th>
+                    <th>Review Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-sellers-table-body">
+                  <tr><td colspan="5" style="text-align: center;">Loading seller profiles...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Categories -->
+        <div id="tab-categories" class="tab-pane" style="display: none;">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Product Category Management</h2>
+              <p class="section-subtitle">Manage shopping departments and catalog structure</p>
+            </div>
+            <button class="btn btn-primary" onclick="AdminDashboard.openAddCategoryModal()">+ Add Category</button>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Category Name</th>
+                    <th>Category ID</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-categories-table-body">
+                  <tr><td colspan="5" style="text-align: center;">Loading categories...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 5: Products -->
+        <div id="tab-products" class="tab-pane" style="display: none;">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Catalog Product Oversight</h2>
+              <p class="section-subtitle">Inspect and control all products listed by sellers</p>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Visibility</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-products-table-body">
+                  <tr><td colspan="6" style="text-align: center;">Loading products...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 6: Orders -->
+        <div id="tab-orders" class="tab-pane" style="display: none;">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Platform Order Administration</h2>
+              <p class="section-subtitle">Inspect orders across all sellers and update fulfillment statuses</p>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Order Ref</th>
+                    <th>Customer</th>
+                    <th>Total</th>
+                    <th>Payment Mode</th>
+                    <th>Status</th>
+                    <th>Admin Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-orders-table-body">
+                  <tr><td colspan="6" style="text-align: center;">Loading orders...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 7: Audits -->
+        <div id="tab-audits" class="tab-pane" style="display: none;">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Security & Action Audit Logs</h2>
+              <p class="section-subtitle">Chronological record of sensitive actions across VELMART</p>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Actor & Role</th>
+                    <th>Action</th>
+                    <th>Target</th>
+                    <th>Details</th>
+                    <th>Client IP</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-audit-table-body">
+                  <tr><td colspan="6" style="text-align: center;">Loading audit trails...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Add Category Modal -->
+  <div id="add-category-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Create New Category</h3>
+        <button class="modal-close" onclick="AdminDashboard.closeAddCategoryModal()">&times;</button>
+      </div>
+      <form onsubmit="AdminDashboard.submitNewCategory(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Category ID (Slug) *</label>
+            <input type="text" id="cat-id" class="form-control" placeholder="e.g. smart-wearables" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category Name *</label>
+            <input type="text" id="cat-name" class="form-control" placeholder="e.g. Smart Wearables" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea id="cat-desc" class="form-control" placeholder="Short summary of this category..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Banner Image URL</label>
+            <input type="url" id="cat-image" class="form-control" placeholder="https://..." />
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Display Order</label>
+            <input type="number" id="cat-order" class="form-control" value="0" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="AdminDashboard.closeAddCategoryModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="app-footer"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/admin-dashboard.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      AdminDashboard.init();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VELMART — Online Shopping for Watches, Electronics & Fashion</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/toast-modal.css">
+</head>
+<body>
+  <div id="app-header"></div>
+
+  <main>
+    <!-- Hero Banner Section -->
+    <section style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1d4ed8 100%); color: #ffffff; padding: 70px 0; margin-bottom: 50px;">
+      <div class="container" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center;">
+        <div>
+          <span class="badge" style="background: rgba(255, 255, 255, 0.15); color: #ffffff; margin-bottom: 16px; font-size: 13px;">
+            ⭐ New Season Timepieces & Lifestyle Essentials
+          </span>
+          <h1 style="font-size: 42px; font-weight: 800; line-height: 1.2; margin-bottom: 18px;">
+            Elevate Your Everyday Style with <span style="color: #60a5fa;">VELMART</span>
+          </h1>
+          <p style="font-size: 16px; color: #cbd5e1; line-height: 1.6; margin-bottom: 28px; max-width: 520px;">
+            Explore curated collections of luxury and analog watches, wireless audio, premium men's & women's apparel, and home living products delivered directly to your doorstep with Cash on Delivery.
+          </p>
+          <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+            <a href="/products.html?category=watches" class="btn btn-primary btn-lg">Explore Watches</a>
+            <a href="/products.html" class="btn btn-secondary btn-lg">Shop All Products</a>
+          </div>
+        </div>
+        <div style="text-align: center;">
+          <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=700&auto=format&fit=crop&q=80" alt="VELMART Featured Watches" style="border-radius: var(--radius-lg); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); max-height: 380px; width: 100%; object-fit: cover;" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories Grid -->
+    <section class="container" style="margin-bottom: 60px;">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Shop by Category</h2>
+          <p class="section-subtitle">Discover popular shopping departments on VELMART</p>
+        </div>
+        <a href="/products.html" class="btn btn-outline btn-sm">View All Categories &rarr;</a>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px;">
+        <a href="/products.html?category=watches" class="card" style="text-align: center; padding: 20px 14px; text-decoration: none; color: inherit; transition: var(--transition);">
+          <div style="font-size: 32px; margin-bottom: 8px;">⌚</div>
+          <strong style="font-size: 14px; color: var(--primary-navy);">Watches</strong>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Analog, Sports & Smart</div>
+        </a>
+
+        <a href="/products.html?category=electronics" class="card" style="text-align: center; padding: 20px 14px; text-decoration: none; color: inherit;">
+          <div style="font-size: 32px; margin-bottom: 8px;">🎧</div>
+          <strong style="font-size: 14px; color: var(--primary-navy);">Electronics</strong>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Audio & Gadgets</div>
+        </a>
+
+        <a href="/products.html?category=mens-fashion" class="card" style="text-align: center; padding: 20px 14px; text-decoration: none; color: inherit;">
+          <div style="font-size: 32px; margin-bottom: 8px;">👔</div>
+          <strong style="font-size: 14px; color: var(--primary-navy);">Men's Fashion</strong>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Shirts & Essentials</div>
+        </a>
+
+        <a href="/products.html?category=womens-fashion" class="card" style="text-align: center; padding: 20px 14px; text-decoration: none; color: inherit;">
+          <div style="font-size: 32px; margin-bottom: 8px;">👗</div>
+          <strong style="font-size: 14px; color: var(--primary-navy);">Women's Fashion</strong>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Dresses & Ethnic</div>
+        </a>
+
+        <a href="/products.html?category=footwear" class="card" style="text-align: center; padding: 20px 14px; text-decoration: none; color: inherit;">
+          <div style="font-size: 32px; margin-bottom: 8px;">👟</div>
+          <strong style="font-size: 14px; color: var(--primary-navy);">Footwear</strong>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Sneakers & Formals</div>
+        </a>
+
+        <a href="/products.html?category=bags-accessories" class="card" style="text-align: center; padding: 20px 14px; text-decoration: none; color: inherit;">
+          <div style="font-size: 32px; margin-bottom: 8px;">🎒</div>
+          <strong style="font-size: 14px; color: var(--primary-navy);">Bags & Wallets</strong>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Leather Backpacks</div>
+        </a>
+
+        <a href="/products.html?category=home-living" class="card" style="text-align: center; padding: 20px 14px; text-decoration: none; color: inherit;">
+          <div style="font-size: 32px; margin-bottom: 8px;">🏡</div>
+          <strong style="font-size: 14px; color: var(--primary-navy);">Home & Living</strong>
+          <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Decor & Lighting</div>
+        </a>
+      </div>
+    </section>
+
+    <!-- Featured Watches Spotlight -->
+    <section class="container" style="margin-bottom: 60px;">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Featured Watches Collection</h2>
+          <p class="section-subtitle">Precision analog, luxury chronographs, and next-gen smartwatches</p>
+        </div>
+        <a href="/products.html?category=watches" class="btn btn-outline btn-sm">See All Watches &rarr;</a>
+      </div>
+
+      <div id="featured-watches-container" class="products-grid">
+        <!-- Loaded via JS -->
+      </div>
+    </section>
+
+    <!-- Value Propositions Banner -->
+    <section style="background: #ffffff; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 40px 0; margin-bottom: 60px;">
+      <div class="container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; text-align: center;">
+        <div>
+          <div style="font-size: 28px; margin-bottom: 8px;">🚚</div>
+          <h4 style="font-size: 16px; font-weight: 700; color: var(--primary-navy); margin-bottom: 4px;">Free Delivery</h4>
+          <p style="font-size: 13px; color: var(--text-secondary);">Enjoy free shipping on all eligible orders above ₹999 across India.</p>
+        </div>
+        <div>
+          <div style="font-size: 28px; margin-bottom: 8px;">💵</div>
+          <h4 style="font-size: 16px; font-weight: 700; color: var(--primary-navy); margin-bottom: 4px;">Cash on Delivery</h4>
+          <p style="font-size: 13px; color: var(--text-secondary);">Pay at your doorstep after receiving and inspecting your package.</p>
+        </div>
+        <div>
+          <div style="font-size: 28px; margin-bottom: 8px;">🛡️</div>
+          <h4 style="font-size: 16px; font-weight: 700; color: var(--primary-navy); margin-bottom: 4px;">100% Genuine Quality</h4>
+          <p style="font-size: 13px; color: var(--text-secondary);">Direct from verified seller partners with manufacturer warranties.</p>
+        </div>
+        <div>
+          <div style="font-size: 28px; margin-bottom: 8px;">🔄</div>
+          <h4 style="font-size: 16px; font-weight: 700; color: var(--primary-navy); margin-bottom: 4px;">Easy Cancellations</h4>
+          <p style="font-size: 13px; color: var(--text-secondary);">Hassle-free order cancellation anytime before your package is dispatched.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/catalog.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const container = document.getElementById('featured-watches-container');
+      if (!container) return;
+      try {
+        const res = await API.get('/api/public/products?categoryId=watches');
+        if (res && res.success && res.data) {
+          Catalog.renderProductsList(res.data.slice(0, 4), container);
+        }
+      } catch (e) {
+        console.warn("Failed to load featured watches", e);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Portal Login — VELMART</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/toast-modal.css">
+</head>
+<body>
+  <div id="app-header"></div>
+
+  <main class="container" style="padding: 60px 20px; display: flex; justify-content: center;">
+    <div class="card" style="max-width: 440px; width: 100%; padding: 34px;">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <span class="badge badge-warning" style="margin-bottom: 10px;">VELMART Partner Hub</span>
+        <h1 style="font-size: 24px; font-weight: 800; color: var(--primary-navy); margin-bottom: 6px;">Seller Login</h1>
+        <p style="color: var(--text-secondary); font-size: 14px;">Manage your watch and lifestyle catalog & orders</p>
+      </div>
+
+      <form onsubmit="event.preventDefault(); Auth.login(document.getElementById('seller-email').value, document.getElementById('seller-password').value, '/seller-dashboard.html');">
+        <div class="form-group">
+          <label class="form-label" for="seller-email">Business Email</label>
+          <input type="email" id="seller-email" class="form-control" placeholder="seller@velmart.com" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="seller-password">Password</label>
+          <input type="password" id="seller-password" class="form-control" placeholder="••••••••" required />
+        </div>
+
+        <button type="submit" class="btn btn-navy btn-lg btn-block" style="margin-top: 10px;">
+          Access Seller Dashboard
+        </button>
+
+        <div style="text-align: center; margin-top: 24px; font-size: 14px; color: var(--text-secondary);">
+          Want to become a VELMART seller? <a href="/seller-register.html" style="font-weight: 600;">Register your business</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

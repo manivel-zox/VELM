@@ -1,0 +1,35 @@
+# ==============================================================================
+# VELMART - Systemd Service Configuration for AWS Lightsail Ubuntu
+# Location on Server: /etc/systemd/system/velmart.service
+# ==============================================================================
+
+[Unit]
+Description=VELMART E-Commerce Spring Boot Application
+After=syslog.target network.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/opt/velmart
+ExecStart=/usr/bin/java -Xms512m -Xmx1024m -XX:+UseG1GC -Dspring.profiles.active=prod -jar /opt/velmart/velmart.jar
+
+# Load secure environment variables from /opt/velmart/.env
+EnvironmentFile=/opt/velmart/.env
+
+# Restart on crash
+Restart=always
+RestartSec=10
+
+# Security Sandboxing
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+
+# Standard output and error logging to syslog
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=velmart
+
+[Install]
+WantedBy=multi-user.target

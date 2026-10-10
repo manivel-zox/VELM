@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Registration — VELMART</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/toast-modal.css">
+</head>
+<body>
+  <div id="app-header"></div>
+
+  <main class="container" style="padding: 60px 20px; display: flex; justify-content: center;">
+    <div class="card" style="max-width: 480px; width: 100%; padding: 34px;">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <h1 style="font-size: 24px; font-weight: 800; color: var(--primary-navy); margin-bottom: 6px;">Create Your Account</h1>
+        <p style="color: var(--text-secondary); font-size: 14px;">Join VELMART for express checkout and exclusive deals</p>
+      </div>
+
+      <form onsubmit="event.preventDefault(); Auth.registerCustomer({
+        name: document.getElementById('reg-name').value,
+        email: document.getElementById('reg-email').value,
+        phone: document.getElementById('reg-phone').value,
+        password: document.getElementById('reg-password').value,
+        role: 'ROLE_CUSTOMER'
+      });">
+        <div class="form-group">
+          <label class="form-label" for="reg-name">Full Name *</label>
+          <input type="text" id="reg-name" class="form-control" placeholder="e.g. Priya Sharma" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-email">Email Address *</label>
+          <input type="email" id="reg-email" class="form-control" placeholder="name@example.com" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-phone">Phone Number *</label>
+          <input type="tel" id="reg-phone" class="form-control" placeholder="+91 9876543210" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-password">Password (Minimum 6 characters) *</label>
+          <input type="password" id="reg-password" class="form-control" placeholder="••••••••" minlength="6" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top: 10px;">
+          Register Account
+        </button>
+
+        <div style="text-align: center; margin-top: 24px; font-size: 14px; color: var(--text-secondary);">
+          Already have an account? <a href="/login.html" style="font-weight: 600;">Sign in here</a>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seller Control Center — VELMART</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/toast-modal.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+  <div id="app-header"></div>
+
+  <main class="container">
+    <div id="pending-approval-banner" style="display: none; background: var(--warning-bg); border: 1px solid var(--warning); color: #92400e; padding: 14px 20px; border-radius: var(--radius-md); margin-top: 24px; font-size: 14px;">
+      ⏳ <strong>Seller Application Status: PENDING</strong>. Your vendor application is currently under administrator review. Product publishing will activate upon verification.
+    </div>
+
+    <div class="dashboard-layout">
+      <!-- Sidebar Navigation -->
+      <aside class="dashboard-sidebar">
+        <div class="user-profile-summary">
+          <div class="user-avatar-placeholder" style="background: linear-gradient(135deg, #d97706, #b45309);">S</div>
+          <h3 id="seller-business-name" style="font-size: 16px; font-weight: 700; color: var(--primary-navy);">Seller Partner</h3>
+          <span id="seller-status-badge" class="badge badge-warning" style="margin-top: 6px;">PENDING</span>
+        </div>
+
+        <ul class="sidebar-nav">
+          <li>
+            <a href="javascript:void(0)" class="sidebar-link active" data-tab="overview" onclick="SellerDashboard.switchTab('overview')">
+              📊 Analytics Overview
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)" class="sidebar-link" data-tab="products" onclick="SellerDashboard.switchTab('products')">
+              📦 My Products & Stock
+            </a>
+          </li>
+          <li>
+            <a href="javascript:void(0)" class="sidebar-link" data-tab="orders" onclick="SellerDashboard.switchTab('orders')">
+              📑 Order Fulfillments
+            </a>
+          </li>
+          <li style="margin-top: 16px; border-top: 1px solid var(--border-color); padding-top: 12px;">
+            <a href="javascript:void(0)" class="sidebar-link" style="color: var(--danger);" onclick="Auth.logout()">
+              🚪 Sign Out
+            </a>
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Content Area -->
+      <section class="dashboard-content">
+        <!-- Tab 1: Overview -->
+        <div id="tab-overview" class="tab-pane">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Seller Overview</h2>
+              <p class="section-subtitle">Real-time inventory and fulfillment performance</p>
+            </div>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-label">Total Products</span>
+              <span id="stat-total-products" class="stat-value">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Active / Live</span>
+              <span id="stat-active-products" class="stat-value">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Out of Stock</span>
+              <span id="stat-out-of-stock" class="stat-value" style="color: var(--danger);">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Total Orders</span>
+              <span id="stat-total-orders" class="stat-value">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Pending Shipments</span>
+              <span id="stat-pending-fulfillments" class="stat-value" style="color: var(--warning);">0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Total Revenue</span>
+              <span id="stat-revenue" class="stat-value" style="color: var(--accent-blue);">₹0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Products -->
+        <div id="tab-products" class="tab-pane" style="display: none;">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Product & Stock Management</h2>
+              <p class="section-subtitle">Add new items and manage inventory pricing and quantities</p>
+            </div>
+            <button class="btn btn-primary" onclick="SellerDashboard.openAddProductModal()">+ Add New Product</button>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Stock Qty</th>
+                    <th>Status</th>
+                    <th>Visibility</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="seller-products-table-body">
+                  <tr><td colspan="6" style="text-align: center;">Loading inventory...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Orders -->
+        <div id="tab-orders" class="tab-pane" style="display: none;">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title">Order Fulfillment</h2>
+              <p class="section-subtitle">Dispatch customer orders and advance shipping status</p>
+            </div>
+          </div>
+
+          <div class="card" style="padding: 0; overflow: hidden;">
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Order Ref</th>
+                    <th>Product Item</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Fulfillment Action</th>
+                  </tr>
+                </thead>
+                <tbody id="seller-orders-table-body">
+                  <tr><td colspan="6" style="text-align: center;">Loading orders...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Add Product Modal -->
+  <div id="add-product-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Add New Product to Catalog</h3>
+        <button class="modal-close" onclick="SellerDashboard.closeAddProductModal()">&times;</button>
+      </div>
+      <form onsubmit="SellerDashboard.submitNewProduct(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Product Name *</label>
+            <input type="text" id="prod-name" class="form-control" placeholder="e.g. Classic Steel Chronograph Watch" required />
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label">Brand *</label>
+              <input type="text" id="prod-brand" class="form-control" placeholder="e.g. Chronos Royal" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Category *</label>
+              <select id="prod-category" class="form-select" required>
+                <option value="watches">Watches</option>
+                <option value="electronics">Electronics</option>
+                <option value="mens-fashion">Men's Fashion</option>
+                <option value="womens-fashion">Women's Fashion</option>
+                <option value="footwear">Footwear</option>
+                <option value="bags-accessories">Bags & Accessories</option>
+                <option value="home-living">Home & Living</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label">Selling Price (₹) *</label>
+              <input type="number" id="prod-price" class="form-control" step="0.01" min="1" placeholder="1999.00" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Original Price (₹)</label>
+              <input type="number" id="prod-orig-price" class="form-control" step="0.01" min="1" placeholder="2999.00" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Stock Units *</label>
+              <input type="number" id="prod-stock" class="form-control" min="0" placeholder="25" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Image URL *</label>
+            <input type="url" id="prod-image" class="form-control" placeholder="https://images.unsplash.com/..." required />
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Description *</label>
+            <textarea id="prod-desc" class="form-control" placeholder="Provide complete product details, dimensions, and specifications..." required></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="SellerDashboard.closeAddProductModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Publish Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="app-footer"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/seller-dashboard.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      SellerDashboard.init();
+    });
+  </script>
+</body>
+</html>

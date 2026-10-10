@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details — VELMART Online Shopping</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/toast-modal.css">
+  <style>
+    .gallery-thumb {
+      width: 68px;
+      height: 68px;
+      border-radius: 8px;
+      border: 2px solid var(--border-color);
+      overflow: hidden;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .gallery-thumb.active, .gallery-thumb:hover {
+      border-color: var(--accent-blue);
+    }
+    .gallery-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+  <div id="app-header"></div>
+
+  <main class="container" style="padding-top: 30px; padding-bottom: 60px;">
+    <div style="margin-bottom: 20px;">
+      <a href="/products.html" style="font-size: 14px; color: var(--text-secondary);">&larr; Back to Catalog</a>
+    </div>
+
+    <div id="product-detail-container">
+      <div class="loading-container">
+        <div class="spinner spinner-dark"></div>
+        <p>Loading product details...</p>
+      </div>
+    </div>
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/product-detail.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      ProductDetail.init();
+    });
+  </script>
+</body>
+</html>
