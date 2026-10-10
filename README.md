@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # VELMART — Full-Stack E-Commerce Platform
 
 VELMART is a secure, enterprise-grade e-commerce web application engineered with **Java 21**, **Spring Boot 3.x**, **Spring Data JPA**, **MySQL 8.x**, **Spring Security (RBAC & BCrypt)**, and **Vanilla HTML5/CSS3/JavaScript**.
@@ -98,6 +97,3 @@ mvn clean test
 - `ProductOwnershipTest`: Strict seller record isolation and ownership verification.
 - `CategoryAndCatalogServiceTest`: Catalog filtering, price ranges, search, and sorting.
 - `SellerAndAdminServiceTest`: Seller registration workflow, admin approval, and platform metrics.
-=======
-# VELM
->>>>>>> 9f02b73ded935751fb069f4fdf3c463ae2752f10

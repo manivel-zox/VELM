@@ -309,6 +309,8 @@ const AdminDashboard = {
       if (o.orderStatus === 'CANCELLED') badgeClass = 'badge-danger';
       if (o.orderStatus === 'SHIPPED') badgeClass = 'badge-warning';
 
+      const itemCount = (o.items && Array.isArray(o.items)) ? o.items.length : 0;
+
       html += `
         <tr>
           <td>
@@ -322,6 +324,11 @@ const AdminDashboard = {
           <td style="font-weight: 700;">${API.formatINR(o.totalAmount)}</td>
           <td>${o.paymentMethod}</td>
           <td><span class="badge ${badgeClass}">${o.orderStatus}</span></td>
+          <td>
+            <button class="btn btn-secondary btn-sm" onclick="AdminDashboard.viewOrderProducts('${o.orderId}')">
+              📦 View Items (${itemCount})
+            </button>
+          </td>
           <td>
             <select class="form-select" style="padding: 4px 8px; font-size: 12px; width: 130px;" onchange="AdminDashboard.updateOrderStatus('${o.orderId}', this.value)">
               <option value="">Change Status...</option>
@@ -348,6 +355,115 @@ const AdminDashboard = {
     } catch (err) {
       UI.showToast(err.message || 'Status update failed', 'error');
     }
+  },
+
+  viewOrderProducts(orderId) {
+    const order = this.orders ? this.orders.find(o => o.orderId === orderId) : null;
+    if (!order) {
+      UI.showToast('Order not found', 'error');
+      return;
+    }
+
+    const modalTitle = document.getElementById('order-modal-title');
+    const modalBody = document.getElementById('order-modal-body');
+    const modal = document.getElementById('order-details-modal');
+
+    if (modalTitle) modalTitle.innerText = `Order #${order.orderId} — Purchased Products`;
+
+    let addrText = 'Not specified';
+    if (order.deliveryAddressSnapshot) {
+      const a = order.deliveryAddressSnapshot;
+      const parts = [a.fullName, a.street, a.city, a.state, a.postalCode || a.pincode, a.country].filter(Boolean);
+      addrText = parts.length > 0 ? parts.join(', ') : 'Not specified';
+    }
+
+    let itemsHtml = '';
+    if (order.items && order.items.length > 0) {
+      order.items.forEach(item => {
+        let fBadge = 'badge-neutral';
+        if (item.fulfillmentStatus === 'DELIVERED') fBadge = 'badge-success';
+        if (item.fulfillmentStatus === 'SHIPPED') fBadge = 'badge-warning';
+        if (item.fulfillmentStatus === 'CANCELLED') fBadge = 'badge-danger';
+
+        itemsHtml += `
+          <div style="display: flex; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+            <img src="${item.productImageSnapshot || ''}" alt="${item.productNameSnapshot || ''}" style="width: 56px; height: 56px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-color);" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80'" />
+            <div style="flex: 1;">
+              <div style="font-weight: 700; font-size: 14px; color: var(--primary-navy);">${item.productNameSnapshot || 'Product'}</div>
+              <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                <span>Product ID: <code>${item.productId || '-'}</code></span> &bull; 
+                <span>Seller ID: <code>${item.sellerId || '-'}</code></span>
+              </div>
+              <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">
+                Unit Price: <strong>${API.formatINR(item.unitPriceSnapshot || 0)}</strong> &times; Quantity: <strong>${item.quantity}</strong>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-weight: 700; font-size: 15px; color: var(--accent-blue);">${API.formatINR(item.lineTotal || (item.unitPriceSnapshot * item.quantity))}</div>
+              <span class="badge ${fBadge}" style="margin-top: 4px; font-size: 11px;">
+                ${item.fulfillmentStatus || 'PROCESSING'}
+              </span>
+            </div>
+          </div>
+        `;
+      });
+    } else {
+      itemsHtml = '<p style="color: var(--text-muted); padding: 12px 0;">No product items found for this order.</p>';
+    }
+
+    if (modalBody) {
+      modalBody.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border-color);">
+          <div>
+            <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Customer Details</div>
+            <div style="font-weight: 700; font-size: 14px; color: var(--primary-navy); margin-top: 2px;">${order.customerName || '-'}</div>
+            <div style="font-size: 12px; color: var(--text-secondary);">${order.customerEmail || '-'}</div>
+            <div style="font-size: 12px; color: var(--text-secondary);">${order.contactPhone || '-'}</div>
+          </div>
+          <div>
+            <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Shipping Address</div>
+            <div style="font-size: 13px; line-height: 1.4; color: var(--text-secondary); margin-top: 2px;">${addrText}</div>
+          </div>
+          <div>
+            <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Order & Payment</div>
+            <div style="font-size: 12px; margin-top: 2px;">Date: <strong>${new Date(order.createdAt).toLocaleString()}</strong></div>
+            <div style="font-size: 12px;">Method: <strong>${order.paymentMethod || 'COD'}</strong> (${order.paymentStatus || 'PENDING'})</div>
+            <div style="font-size: 12px; margin-top: 2px;">Status: <span class="badge badge-primary">${order.orderStatus}</span></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <h4 style="font-size: 14px; font-weight: 700; color: var(--primary-navy); margin-bottom: 10px;">Purchased Products (${order.items ? order.items.length : 0})</h4>
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0 16px;">
+            ${itemsHtml}
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; margin-top: 14px;">
+          <div style="width: 280px; font-size: 13px; background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px 16px;">
+            <div style="display: flex; justify-content: space-between; padding: 3px 0;">
+              <span style="color: var(--text-secondary);">Items Subtotal:</span>
+              <span style="font-weight: 600;">${API.formatINR(order.itemSubtotal || order.totalAmount)}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 3px 0;">
+              <span style="color: var(--text-secondary);">Delivery Fee:</span>
+              <span style="font-weight: 600;">${API.formatINR(order.shippingFee || 0)}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 6px 0; border-top: 1px solid var(--border-color); margin-top: 4px; font-weight: 700; font-size: 15px; color: var(--primary-navy);">
+              <span>Grand Total:</span>
+              <span style="color: var(--accent-blue);">${API.formatINR(order.totalAmount)}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    if (modal) modal.classList.add('active');
+  },
+
+  closeOrderDetailsModal() {
+    const modal = document.getElementById('order-details-modal');
+    if (modal) modal.classList.remove('active');
   },
 
   // Audit Logs

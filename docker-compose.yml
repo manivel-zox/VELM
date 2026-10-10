@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  # ============================================================================
+  # 1. MySQL 8.0 Database Engine
+  # ============================================================================
+  mysql:
+    image: mysql:8.0
+    container_name: velmart-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword123!
+      MYSQL_DATABASE: velmart_db
+      MYSQL_USER: velmart
+      MYSQL_PASSWORD: Velmart#Cloud2026!
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./deployment/mysql-schema.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword123!"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # ============================================================================
+  # 2. VELMART Spring Boot Application
+  # ============================================================================
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: velmart-app
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SERVER_PORT: 8080
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: velmart_db
+      MYSQL_USER: velmart
+      MYSQL_PASSWORD: Velmart#Cloud2026!
+      ADMIN_INITIAL_EMAIL: admin@velmart.com
+      ADMIN_INITIAL_PASSWORD: Admin@Velmart2026!
+      ADMIN_INITIAL_NAME: Velmart Platform Admin
+      COOKIE_SECURE: "false"
+
+  # ============================================================================
+  # 3. Web Database Viewer (Adminer) - Direct access to users, products & orders
+  # ============================================================================
+  adminer:
+    image: adminer:latest
+    container_name: velmart-adminer
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8081:8080"
+
+volumes:
+  mysql_data:
