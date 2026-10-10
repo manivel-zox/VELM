@@ -30,8 +30,7 @@ EXPOSE 8080
 
 # Configure production defaults
 ENV SPRING_PROFILES_ACTIVE=prod \
-    SERVER_PORT=8080 \
     JAVA_OPTS="-Xms256m -Xmx768m -XX:+UseG1GC"
 
-# Launch Spring Boot Application
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/velmart.jar"]
+# Launch Spring Boot Application using dynamic Railway PORT
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -Dserver.port=${PORT:-8080} -jar /app/velmart.jar"]

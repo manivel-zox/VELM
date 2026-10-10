@@ -11,11 +11,11 @@ spring:
     serialization:
       write-dates-as-timestamps: false
 
-  # MySQL DataSource Configuration
+  # MySQL DataSource Configuration (supports both standard and Railway environment variables)
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:velmart_db}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
-    username: ${SPRING_DATASOURCE_USERNAME:${MYSQL_USER:root}}
-    password: ${SPRING_DATASOURCE_PASSWORD:${MYSQL_PASSWORD:root}}
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://${MYSQL_HOST:${MYSQLHOST:localhost}}:${MYSQL_PORT:${MYSQLPORT:3306}}/${MYSQL_DATABASE:${MYSQLDATABASE:velmart_db}}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC}
+    username: ${SPRING_DATASOURCE_USERNAME:${MYSQL_USER:${MYSQLUSER:root}}}
+    password: ${SPRING_DATASOURCE_PASSWORD:${MYSQL_PASSWORD:${MYSQLPASSWORD:root}}}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   # JPA / Hibernate Configuration
@@ -30,7 +30,8 @@ spring:
         format_sql: true
 
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${PORT:${SERVER_PORT:8080}}
+  forward-headers-strategy: framework
   servlet:
     session:
       timeout: ${SESSION_TIMEOUT_MINUTES:60}m
